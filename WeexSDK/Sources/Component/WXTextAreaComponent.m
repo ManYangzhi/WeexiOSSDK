@@ -21,6 +21,7 @@
 #import "WXUtility.h"
 #import "WXComponent+Layout.h"
 #import "WXComponent_internal.h"
+#import "WXComponent+Layout.h"
 
 #define CorrectX 4 //textview fill text 4 pixel from left. so placeholderlabel have 4 pixel too
 #define CorrectY 8 // textview fill text 8 pixel from top
@@ -73,24 +74,23 @@ typedef UITextView WXTextAreaView;
     __weak typeof(self) weakSelf = self;
     return ^CGSize (CGSize constrainedSize) {
         
-        CGSize computedSize = [[[NSString alloc] init]sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:weakSelf.textView.font.pointSize]}];
+        CGSize computedSize = [[[NSString alloc] init]sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"PingFangSC-Regular" size:weakSelf.textView.font.pointSize]}];
         computedSize.height = _rows? computedSize.height *weakSelf.rows + (CorrectY + CorrectY/2):0;
-        if (!isnan(weakSelf.cssNode->style.minDimensions[CSS_WIDTH])) {
-            computedSize.width = MAX(computedSize.width, weakSelf.cssNode->style.minDimensions[CSS_WIDTH]);
+        if (!isnan(weakSelf.flexCssNode->getMinWidth())) {
+            computedSize.width = MAX(computedSize.width, weakSelf.flexCssNode->getMinWidth());
         }
         
-        if (!isnan(weakSelf.cssNode->style.maxDimensions[CSS_WIDTH])) {
-            computedSize.width = MIN(computedSize.width, weakSelf.cssNode->style.maxDimensions[CSS_WIDTH]);
+        if (!isnan(weakSelf.flexCssNode->getMaxWidth())) {
+            computedSize.width = MIN(computedSize.width, weakSelf.flexCssNode->getMaxWidth());
         }
         
-        if (!isnan(weakSelf.cssNode->style.minDimensions[CSS_HEIGHT])) {
-            computedSize.height = MAX(computedSize.height, weakSelf.cssNode->style.minDimensions[CSS_HEIGHT]);
+        if (!isnan(weakSelf.flexCssNode->getMinHeight())) {
+            computedSize.height = MAX(computedSize.height, weakSelf.flexCssNode->getMinHeight());
         }
         
-        if (!isnan(weakSelf.cssNode->style.maxDimensions[CSS_HEIGHT])) {
-            computedSize.height = MIN(computedSize.height, weakSelf.cssNode->style.maxDimensions[CSS_HEIGHT]);
+        if (!isnan(weakSelf.flexCssNode->getMaxHeight())) {
+            computedSize.height = MIN(computedSize.height, weakSelf.flexCssNode->getMaxHeight());
         }
-        
         return (CGSize) {
             WXCeilPixelValue(computedSize.width),
             WXCeilPixelValue(computedSize.height)
