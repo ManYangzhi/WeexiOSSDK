@@ -1,2 +1,0 @@
-# WeexiOSSDK
-WeexiOSSDK托管
