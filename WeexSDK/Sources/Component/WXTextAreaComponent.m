@@ -120,6 +120,8 @@ typedef UITextView WXTextAreaView;
 -(void)setTextAlignment:(NSTextAlignment)textAlignForStyle
 {
     [_textView setTextAlignment:textAlignForStyle];
+    self.placeHolderLabel.textAlignment = textAlignForStyle;
+    [self _updateTextContentInset];
 }
 
 -(void)setUserInteractionEnabled:(BOOL)userInteractionEnabled
