@@ -73,7 +73,11 @@ typedef UITextView WXTextAreaView;
     __weak typeof(self) weakSelf = self;
     return ^CGSize (CGSize constrainedSize) {
         
-        CGSize computedSize = [[[NSString alloc] init]sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"PingFangSC-Regular" size:weakSelf.textView.font.pointSize]}];
+        __block CGSize computedSize = CGSizeZero;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            computedSize = [[[NSString alloc] init]sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"PingFangSC-Regular" size:weakSelf.textView.font.pointSize]}];
+        });
+        
         computedSize.height = _rows? computedSize.height *weakSelf.rows + (CorrectY + CorrectY/2):0;
 
         if (!isnan(weakSelf.cssNode->style.minDimensions[CSS_WIDTH])) {
